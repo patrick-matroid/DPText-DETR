@@ -1,5 +1,6 @@
 // Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 #include "DeformAttn/ms_deform_attn.h"
+#include "BezierAlign/BezierAlign.h"
 
 namespace adet {
 
@@ -52,6 +53,8 @@ std::string get_compiler_version() {
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("ms_deform_attn_forward", &ms_deform_attn_forward, "ms_deform_attn_forward");
   m.def("ms_deform_attn_backward", &ms_deform_attn_backward, "ms_deform_attn_backward");
+  m.def("bezier_align_forward", &BezierAlign_forward, "bezier_align_forward");
+  m.def("bezier_align_backward", &BezierAlign_backward, "bezier_align_backward");
 }
 
 } // namespace adet

@@ -35,6 +35,10 @@ _PREDEFINED_SPLITS_TEXT = {
     "ctw1500_poly_test": ("ctw1500/test_images","ctw1500/test_poly.json"),
     "art_test": ("art/test_images","art/test_poly.json"),
     "inversetext_test": ("inversetext/test_images","inversetext/test_poly.json"),
+
+    # evaluation, just for reading images, annotations may be empty
+    "totaltext_test": ("totaltext/test_images", "totaltext/test.json"),
+    "ic15_test": ("ic15/test_images", "ic15/test.json"),
 }
 
 metadata_text = {

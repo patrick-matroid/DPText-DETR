@@ -1,0 +1,1679 @@
+[08/17 01:16:30] detectron2 INFO: Rank of current process: 0. World size: 1
+[08/17 01:16:31] detectron2 INFO: Environment info:
+----------------------  ----------------------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.8.16 (default, Jun 12 2023, 18:09:05) [GCC 11.2.0]
+numpy                   1.24.3
+detectron2              0.1.3 @/home/ubuntu/anaconda3/envs/parseq/lib/python3.8/site-packages/detectron2
+Compiler                GCC 9.4
+CUDA compiler           CUDA 11.2
+detectron2 arch flags   sm_75
+DETECTRON2_ENV_MODULE   <not set>
+PyTorch                 1.10.0+cu111 @/home/ubuntu/anaconda3/envs/parseq/lib/python3.8/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   NVIDIA GeForce RTX 2080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  9.5.0
+torchvision             0.11.0+cu111 @/home/ubuntu/anaconda3/envs/parseq/lib/python3.8/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75, sm_80, sm_86
+fvcore                  0.1.5.post20221221
+cv2                     4.8.0
+----------------------  ----------------------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.2.3 (Git Hash 7336ca9f055cf1bfa13efb658fe15dc9b41f0740)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 11.1
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.0.5
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.1, CUDNN_VERSION=8.0.5, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.10.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+[08/17 01:16:31] detectron2 INFO: Command line arguments: Namespace(config_file='configs/DPText_DETR/IC15/R_50_poly_pretrain_ArT_for_ic15_art_imgsize_strong.yaml', dist_url='tcp://127.0.0.1:50152', eval_only=True, machine_rank=0, num_gpus=1, num_machines=1, opts=['MODEL.WEIGHTS', 'ckpts/pretrain_art.pth'], resume=False)
+[08/17 01:16:31] detectron2 INFO: Contents of args.config_file=configs/DPText_DETR/IC15/R_50_poly_pretrain_ArT_for_ic15_art_imgsize_strong.yaml:
+_BASE_: "../Base_rec.yaml"
+
+MODEL:
+  WEIGHTS: "output/R50/150k_tt_mlt_13_15_textocr/pretrain/model_final.pth"
+  TRANSFORMER:
+    INFERENCE_TH_TEST: 0.3
+
+DATASETS:
+  TRAIN: ("ic15_train",)
+  TEST: ("ic15_test",)
+
+INPUT:
+  MIN_SIZE_TEST: 1200
+  MAX_SIZE_TEST: 1900
+  # ROTATE: False
+
+SOLVER:
+  IMS_PER_BATCH: 8
+  BASE_LR: 1e-5
+  LR_BACKBONE: 1e-6
+  WARMUP_ITERS: 0
+  STEPS: (100000,)  # no step
+  MAX_ITER: 1000
+  CHECKPOINT_PERIOD: 1000
+
+TEST:
+  EVAL_PERIOD: 1000
+  # 1 - Generic, 2 - Weak, 3 - Strong (for icdar2015)
+  LEXICON_TYPE: 3
+
+OUTPUT_DIR: "output/R50/ArT/pretrain/ic15_art_imgsize_strong"
+[08/17 01:16:31] detectron2 INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  ASPECT_RATIO_GROUPING: True
+  FILTER_EMPTY_ANNOTATIONS: True
+  NUM_WORKERS: 4
+  REPEAT_THRESHOLD: 0.0
+  SAMPLER_TRAIN: TrainingSampler
+DATASETS:
+  PRECOMPUTED_PROPOSAL_TOPK_TEST: 1000
+  PRECOMPUTED_PROPOSAL_TOPK_TRAIN: 2000
+  PROPOSAL_FILES_TEST: ()
+  PROPOSAL_FILES_TRAIN: ()
+  TEST: ('ic15_test',)
+  TRAIN: ('ic15_train',)
+GLOBAL:
+  HACK: 1.0
+INPUT:
+  CROP:
+    CROP_INSTANCE: False
+    ENABLED: True
+    SIZE: [0.1, 0.1]
+    TYPE: relative_range
+  FORMAT: RGB
+  HFLIP_TRAIN: False
+  MASK_FORMAT: polygon
+  MAX_SIZE_TEST: 1900
+  MAX_SIZE_TRAIN: 1600
+  MIN_SIZE_TEST: 1200
+  MIN_SIZE_TRAIN: (480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832)
+  MIN_SIZE_TRAIN_SAMPLING: choice
+MODEL:
+  ANCHOR_GENERATOR:
+    ANGLES: [[-90, 0, 90]]
+    ASPECT_RATIOS: [[0.5, 1.0, 2.0]]
+    NAME: DefaultAnchorGenerator
+    OFFSET: 0.0
+    SIZES: [[32, 64, 128, 256, 512]]
+  BACKBONE:
+    ANTI_ALIAS: False
+    FREEZE_AT: 2
+    NAME: build_resnet_backbone
+  BASIS_MODULE:
+    ANN_SET: coco
+    COMMON_STRIDE: 8
+    CONVS_DIM: 128
+    IN_FEATURES: ['p3', 'p4', 'p5']
+    LOSS_ON: False
+    LOSS_WEIGHT: 0.3
+    NAME: ProtoNet
+    NORM: SyncBN
+    NUM_BASES: 4
+    NUM_CLASSES: 80
+    NUM_CONVS: 3
+  BATEXT:
+    CANONICAL_SIZE: 96
+    CONV_DIM: 256
+    CUSTOM_DICT: 
+    IN_FEATURES: ['p2', 'p3', 'p4']
+    NUM_CHARS: 25
+    NUM_CONV: 2
+    POOLER_RESOLUTION: (8, 32)
+    POOLER_SCALES: (0.25, 0.125, 0.0625)
+    RECOGNITION_LOSS: ctc
+    RECOGNIZER: attn
+    SAMPLING_RATIO: 1
+    USE_AET: False
+    USE_COORDCONV: False
+    VOC_SIZE: 96
+  BLENDMASK:
+    ATTN_SIZE: 14
+    BOTTOM_RESOLUTION: 56
+    INSTANCE_LOSS_WEIGHT: 1.0
+    POOLER_SAMPLING_RATIO: 1
+    POOLER_SCALES: (0.25,)
+    POOLER_TYPE: ROIAlignV2
+    TOP_INTERP: bilinear
+    VISUALIZE: False
+  BOXINST:
+    BOTTOM_PIXELS_REMOVED: 10
+    ENABLED: False
+    PAIRWISE:
+      COLOR_THRESH: 0.3
+      DILATION: 2
+      SIZE: 3
+      WARMUP_ITERS: 10000
+  BiFPN:
+    IN_FEATURES: ['res2', 'res3', 'res4', 'res5']
+    NORM: 
+    NUM_REPEATS: 6
+    OUT_CHANNELS: 160
+  CONDINST:
+    BOTTOM_PIXELS_REMOVED: -1
+    MASK_BRANCH:
+      CHANNELS: 128
+      IN_FEATURES: ['p3', 'p4', 'p5']
+      NORM: BN
+      NUM_CONVS: 4
+      OUT_CHANNELS: 8
+      SEMANTIC_LOSS_ON: False
+    MASK_HEAD:
+      CHANNELS: 8
+      DISABLE_REL_COORDS: False
+      NUM_LAYERS: 3
+      USE_FP16: False
+    MASK_OUT_STRIDE: 4
+    MAX_PROPOSALS: -1
+    TOPK_PROPOSALS_PER_IM: -1
+  DEVICE: cuda
+  DLA:
+    CONV_BODY: DLA34
+    NORM: FrozenBN
+    OUT_FEATURES: ['stage2', 'stage3', 'stage4', 'stage5']
+  FCOS:
+    BOX_QUALITY: ctrness
+    CENTER_SAMPLE: True
+    FPN_STRIDES: [8, 16, 32, 64, 128]
+    INFERENCE_TH_TEST: 0.05
+    INFERENCE_TH_TRAIN: 0.05
+    IN_FEATURES: ['p3', 'p4', 'p5', 'p6', 'p7']
+    LOC_LOSS_TYPE: giou
+    LOSS_ALPHA: 0.25
+    LOSS_GAMMA: 2.0
+    LOSS_NORMALIZER_CLS: fg
+    LOSS_WEIGHT_CLS: 1.0
+    NMS_TH: 0.6
+    NORM: GN
+    NUM_BOX_CONVS: 4
+    NUM_CLASSES: 80
+    NUM_CLS_CONVS: 4
+    NUM_SHARE_CONVS: 0
+    POST_NMS_TOPK_TEST: 100
+    POST_NMS_TOPK_TRAIN: 100
+    POS_RADIUS: 1.5
+    PRE_NMS_TOPK_TEST: 1000
+    PRE_NMS_TOPK_TRAIN: 1000
+    PRIOR_PROB: 0.01
+    SIZES_OF_INTEREST: [64, 128, 256, 512]
+    THRESH_WITH_CTR: False
+    TOP_LEVELS: 2
+    USE_DEFORMABLE: False
+    USE_RELU: True
+    USE_SCALE: True
+    YIELD_BOX_FEATURES: False
+    YIELD_PROPOSAL: False
+  FPN:
+    FUSE_TYPE: sum
+    IN_FEATURES: []
+    NORM: 
+    OUT_CHANNELS: 256
+  KEYPOINT_ON: False
+  LOAD_PROPOSALS: False
+  MASK_ON: False
+  MEInst:
+    AGNOSTIC: True
+    CENTER_SAMPLE: True
+    DIM_MASK: 60
+    FLAG_PARAMETERS: False
+    FPN_STRIDES: [8, 16, 32, 64, 128]
+    GCN_KERNEL_SIZE: 9
+    INFERENCE_TH_TEST: 0.05
+    INFERENCE_TH_TRAIN: 0.05
+    IN_FEATURES: ['p3', 'p4', 'p5', 'p6', 'p7']
+    IOU_LABELS: [0, 1]
+    IOU_THRESHOLDS: [0.5]
+    LAST_DEFORMABLE: False
+    LOC_LOSS_TYPE: giou
+    LOSS_ALPHA: 0.25
+    LOSS_GAMMA: 2.0
+    LOSS_ON_MASK: False
+    MASK_LOSS_TYPE: mse
+    MASK_ON: True
+    MASK_SIZE: 28
+    NMS_TH: 0.6
+    NORM: GN
+    NUM_BOX_CONVS: 4
+    NUM_CLASSES: 80
+    NUM_CLS_CONVS: 4
+    NUM_MASK_CONVS: 4
+    NUM_SHARE_CONVS: 0
+    PATH_COMPONENTS: datasets/coco/components/coco_2017_train_class_agnosticTrue_whitenTrue_sigmoidTrue_60.npz
+    POST_NMS_TOPK_TEST: 100
+    POST_NMS_TOPK_TRAIN: 100
+    POS_RADIUS: 1.5
+    PRE_NMS_TOPK_TEST: 1000
+    PRE_NMS_TOPK_TRAIN: 1000
+    PRIOR_PROB: 0.01
+    SIGMOID: True
+    SIZES_OF_INTEREST: [64, 128, 256, 512]
+    THRESH_WITH_CTR: False
+    TOP_LEVELS: 2
+    TYPE_DEFORMABLE: DCNv1
+    USE_DEFORMABLE: False
+    USE_GCN_IN_MASK: False
+    USE_RELU: True
+    USE_SCALE: True
+    WHITEN: True
+  META_ARCHITECTURE: TransformerPureDetector
+  MOBILENET: False
+  PANOPTIC_FPN:
+    COMBINE:
+      ENABLED: True
+      INSTANCES_CONFIDENCE_THRESH: 0.5
+      OVERLAP_THRESH: 0.5
+      STUFF_AREA_LIMIT: 4096
+    INSTANCE_LOSS_WEIGHT: 1.0
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.12, 57.375]
+  PROPOSAL_GENERATOR:
+    MIN_SIZE: 0
+    NAME: RPN
+  RESNETS:
+    DEFORM_INTERVAL: 1
+    DEFORM_MODULATED: False
+    DEFORM_NUM_GROUPS: 1
+    DEFORM_ON_PER_STAGE: [False, False, False, False]
+    DEPTH: 50
+    NORM: FrozenBN
+    NUM_GROUPS: 1
+    OUT_FEATURES: ['res3', 'res4', 'res5']
+    RES2_OUT_CHANNELS: 256
+    RES5_DILATION: 1
+    STEM_OUT_CHANNELS: 64
+    STRIDE_IN_1X1: False
+    WIDTH_PER_GROUP: 64
+  RETINANET:
+    BBOX_REG_WEIGHTS: (1.0, 1.0, 1.0, 1.0)
+    FOCAL_LOSS_ALPHA: 0.25
+    FOCAL_LOSS_GAMMA: 2.0
+    IN_FEATURES: ['p3', 'p4', 'p5', 'p6', 'p7']
+    IOU_LABELS: [0, -1, 1]
+    IOU_THRESHOLDS: [0.4, 0.5]
+    NMS_THRESH_TEST: 0.5
+    NUM_CLASSES: 80
+    NUM_CONVS: 4
+    PRIOR_PROB: 0.01
+    SCORE_THRESH_TEST: 0.05
+    SMOOTH_L1_LOSS_BETA: 0.1
+    TOPK_CANDIDATES_TEST: 1000
+  ROI_BOX_CASCADE_HEAD:
+    BBOX_REG_WEIGHTS: ((10.0, 10.0, 5.0, 5.0), (20.0, 20.0, 10.0, 10.0), (30.0, 30.0, 15.0, 15.0))
+    IOUS: (0.5, 0.6, 0.7)
+  ROI_BOX_HEAD:
+    BBOX_REG_LOSS_TYPE: smooth_l1
+    BBOX_REG_LOSS_WEIGHT: 1.0
+    BBOX_REG_WEIGHTS: (10.0, 10.0, 5.0, 5.0)
+    CLS_AGNOSTIC_BBOX_REG: False
+    CONV_DIM: 256
+    FC_DIM: 1024
+    NAME: 
+    NORM: 
+    NUM_CONV: 0
+    NUM_FC: 0
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_TYPE: ROIAlignV2
+    SMOOTH_L1_BETA: 0.0
+    TRAIN_ON_PRED_BOXES: False
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 512
+    IN_FEATURES: ['res4']
+    IOU_LABELS: [0, 1]
+    IOU_THRESHOLDS: [0.5]
+    NAME: Res5ROIHeads
+    NMS_THRESH_TEST: 0.5
+    NUM_CLASSES: 80
+    POSITIVE_FRACTION: 0.25
+    PROPOSAL_APPEND_GT: True
+    SCORE_THRESH_TEST: 0.05
+  ROI_KEYPOINT_HEAD:
+    CONV_DIMS: (512, 512, 512, 512, 512, 512, 512, 512)
+    LOSS_WEIGHT: 1.0
+    MIN_KEYPOINTS_PER_IMAGE: 1
+    NAME: KRCNNConvDeconvUpsampleHead
+    NORMALIZE_LOSS_BY_VISIBLE_KEYPOINTS: True
+    NUM_KEYPOINTS: 17
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_TYPE: ROIAlignV2
+  ROI_MASK_HEAD:
+    CLS_AGNOSTIC_MASK: False
+    CONV_DIM: 256
+    NAME: MaskRCNNConvUpsampleHead
+    NORM: 
+    NUM_CONV: 0
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_TYPE: ROIAlignV2
+  RPN:
+    BATCH_SIZE_PER_IMAGE: 256
+    BBOX_REG_LOSS_TYPE: smooth_l1
+    BBOX_REG_LOSS_WEIGHT: 1.0
+    BBOX_REG_WEIGHTS: (1.0, 1.0, 1.0, 1.0)
+    BOUNDARY_THRESH: -1
+    HEAD_NAME: StandardRPNHead
+    IN_FEATURES: ['res4']
+    IOU_LABELS: [0, -1, 1]
+    IOU_THRESHOLDS: [0.3, 0.7]
+    LOSS_WEIGHT: 1.0
+    NMS_THRESH: 0.7
+    POSITIVE_FRACTION: 0.5
+    POST_NMS_TOPK_TEST: 1000
+    POST_NMS_TOPK_TRAIN: 2000
+    PRE_NMS_TOPK_TEST: 6000
+    PRE_NMS_TOPK_TRAIN: 12000
+    SMOOTH_L1_BETA: 0.0
+  SEM_SEG_HEAD:
+    COMMON_STRIDE: 4
+    CONVS_DIM: 128
+    IGNORE_VALUE: 255
+    IN_FEATURES: ['p2', 'p3', 'p4', 'p5']
+    LOSS_WEIGHT: 1.0
+    NAME: SemSegFPNHead
+    NORM: GN
+    NUM_CLASSES: 54
+  SOLOV2:
+    FPN_INSTANCE_STRIDES: [8, 8, 16, 32, 32]
+    FPN_SCALE_RANGES: ((1, 96), (48, 192), (96, 384), (192, 768), (384, 2048))
+    INSTANCE_CHANNELS: 512
+    INSTANCE_IN_CHANNELS: 256
+    INSTANCE_IN_FEATURES: ['p2', 'p3', 'p4', 'p5', 'p6']
+    LOSS:
+      DICE_WEIGHT: 3.0
+      FOCAL_ALPHA: 0.25
+      FOCAL_GAMMA: 2.0
+      FOCAL_USE_SIGMOID: True
+      FOCAL_WEIGHT: 1.0
+    MASK_CHANNELS: 128
+    MASK_IN_CHANNELS: 256
+    MASK_IN_FEATURES: ['p2', 'p3', 'p4', 'p5']
+    MASK_THR: 0.5
+    MAX_PER_IMG: 100
+    NMS_KERNEL: gaussian
+    NMS_PRE: 500
+    NMS_SIGMA: 2
+    NMS_TYPE: matrix
+    NORM: GN
+    NUM_CLASSES: 80
+    NUM_GRIDS: [40, 36, 24, 16, 12]
+    NUM_INSTANCE_CONVS: 4
+    NUM_KERNELS: 256
+    NUM_MASKS: 256
+    PRIOR_PROB: 0.01
+    SCORE_THR: 0.1
+    SIGMA: 0.2
+    TYPE_DCN: DCN
+    UPDATE_THR: 0.05
+    USE_COORD_CONV: True
+    USE_DCN_IN_INSTANCE: False
+  TOP_MODULE:
+    DIM: 16
+    NAME: conv
+  TRANSFORMER:
+    AUX_LOSS: True
+    DEC_LAYERS: 6
+    DEC_N_POINTS: 4
+    DIM_FEEDFORWARD: 1024
+    DROPOUT: 0.1
+    EFSA: True
+    ENABLED: True
+    ENC_LAYERS: 6
+    ENC_N_POINTS: 4
+    EPQM: True
+    HIDDEN_DIM: 256
+    INFERENCE_TH_TEST: 0.3
+    LOSS:
+      AUX_LOSS: True
+      BOX_CLASS_WEIGHT: 2.0
+      BOX_COORD_WEIGHT: 5.0
+      BOX_GIOU_WEIGHT: 2.0
+      FOCAL_ALPHA: 0.25
+      FOCAL_GAMMA: 2.0
+      POINT_CLASS_WEIGHT: 2.0
+      POINT_COORD_WEIGHT: 5.0
+    NHEADS: 8
+    NUM_CHARS: 25
+    NUM_CTRL_POINTS: 16
+    NUM_FEATURE_LEVELS: 4
+    NUM_QUERIES: 100
+    POSITION_EMBEDDING_SCALE: 6.283185307179586
+    USE_POLYGON: True
+    VOC_SIZE: 96
+  VOVNET:
+    BACKBONE_OUT_CHANNELS: 256
+    CONV_BODY: V-39-eSE
+    NORM: FrozenBN
+    OUT_CHANNELS: 256
+    OUT_FEATURES: ['stage2', 'stage3', 'stage4', 'stage5']
+  WEIGHTS: ckpts/pretrain_art.pth
+OUTPUT_DIR: output/R50/ArT/pretrain/ic15_art_imgsize_strong
+SEED: -1
+SOLVER:
+  BASE_LR: 1e-05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 1000
+  CLIP_GRADIENTS:
+    CLIP_TYPE: full_model
+    CLIP_VALUE: 0.1
+    ENABLED: True
+    NORM_TYPE: 2.0
+  GAMMA: 0.1
+  IMS_PER_BATCH: 8
+  LR_BACKBONE: 1e-06
+  LR_BACKBONE_NAMES: ['backbone.0']
+  LR_LINEAR_PROJ_MULT: 0.1
+  LR_LINEAR_PROJ_NAMES: ['reference_points', 'sampling_offsets']
+  LR_SCHEDULER_NAME: WarmupMultiStepLR
+  MAX_ITER: 1000
+  MOMENTUM: 0.9
+  NESTEROV: False
+  OPTIMIZER: ADAMW
+  REFERENCE_WORLD_SIZE: 0
+  STEPS: (100000,)
+  WARMUP_FACTOR: 0.001
+  WARMUP_ITERS: 0
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0.0001
+  WEIGHT_DECAY_NORM: 0.0
+TEST:
+  AUG:
+    ENABLED: False
+    FLIP: True
+    MAX_SIZE: 4000
+    MIN_SIZES: (400, 500, 600, 700, 800, 900, 1000, 1100, 1200)
+  DETECTIONS_PER_IMAGE: 100
+  DET_ONLY: False
+  EVAL_PERIOD: 1000
+  EXPECTED_RESULTS: []
+  KEYPOINT_OKS_SIGMAS: []
+  LEXICON_TYPE: 3
+  PRECISE_BN:
+    ENABLED: False
+    NUM_ITER: 200
+  USE_LEXICON: False
+  WEIGHTED_EDIT_DIST: False
+VERSION: 2
+VIS_PERIOD: 0
+[08/17 01:16:31] detectron2 INFO: Full config saved to output/R50/ArT/pretrain/ic15_art_imgsize_strong/config.yaml
+[08/17 01:16:31] d2.utils.env INFO: Using a generated random seed 33884266
+[08/17 01:16:37] d2.engine.defaults INFO: Model:
+TransformerPureDetector(
+  (dptext_detr): DPText_DETR(
+    (backbone): Joiner(
+      (0): MaskedBackbone(
+        (backbone): ResNet(
+          (stem): BasicStem(
+            (conv1): Conv2d(
+              3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+              (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+            )
+          )
+          (res2): Sequential(
+            (0): BottleneckBlock(
+              (shortcut): Conv2d(
+                64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv1): Conv2d(
+                64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+            )
+            (1): BottleneckBlock(
+              (conv1): Conv2d(
+                256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+            )
+            (2): BottleneckBlock(
+              (conv1): Conv2d(
+                256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=64, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+            )
+          )
+          (res3): Sequential(
+            (0): BottleneckBlock(
+              (shortcut): Conv2d(
+                256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv1): Conv2d(
+                256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+            )
+            (1): BottleneckBlock(
+              (conv1): Conv2d(
+                512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+            )
+            (2): BottleneckBlock(
+              (conv1): Conv2d(
+                512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+            )
+            (3): BottleneckBlock(
+              (conv1): Conv2d(
+                512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=128, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+            )
+          )
+          (res4): Sequential(
+            (0): BottleneckBlock(
+              (shortcut): Conv2d(
+                512, 1024, kernel_size=(1, 1), stride=(2, 2), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+              (conv1): Conv2d(
+                512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+            (1): BottleneckBlock(
+              (conv1): Conv2d(
+                1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+            (2): BottleneckBlock(
+              (conv1): Conv2d(
+                1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+            (3): BottleneckBlock(
+              (conv1): Conv2d(
+                1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+            (4): BottleneckBlock(
+              (conv1): Conv2d(
+                1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+            (5): BottleneckBlock(
+              (conv1): Conv2d(
+                1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=256, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=1024, eps=1e-05)
+              )
+            )
+          )
+          (res5): Sequential(
+            (0): BottleneckBlock(
+              (shortcut): Conv2d(
+                1024, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False
+                (norm): FrozenBatchNorm2d(num_features=2048, eps=1e-05)
+              )
+              (conv1): Conv2d(
+                1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                512, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=2048, eps=1e-05)
+              )
+            )
+            (1): BottleneckBlock(
+              (conv1): Conv2d(
+                2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=2048, eps=1e-05)
+              )
+            )
+            (2): BottleneckBlock(
+              (conv1): Conv2d(
+                2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv2): Conv2d(
+                512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=512, eps=1e-05)
+              )
+              (conv3): Conv2d(
+                512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+                (norm): FrozenBatchNorm2d(num_features=2048, eps=1e-05)
+              )
+            )
+          )
+        )
+      )
+      (1): PositionalEncoding2D()
+    )
+    (ctrl_point_embed): Embedding(16, 256)
+    (transformer): DeformableTransformer_Det(
+      (encoder): DeformableTransformerEncoder(
+        (layers): ModuleList(
+          (0): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (1): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (3): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (4): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): DeformableTransformerEncoderLayer(
+            (self_attn): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout1): Dropout(p=0.1, inplace=False)
+            (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout2): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+      )
+      (decoder): DeformableTransformerDecoder_Det(
+        (layers): ModuleList(
+          (0): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (1): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (3): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (4): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): DeformableTransformerDecoderLayer_Det(
+            (attn_cross): MSDeformAttn(
+              (sampling_offsets): Linear(in_features=256, out_features=256, bias=True)
+              (attention_weights): Linear(in_features=256, out_features=128, bias=True)
+              (value_proj): Linear(in_features=256, out_features=256, bias=True)
+              (output_proj): Linear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_cross): Dropout(p=0.1, inplace=False)
+            (norm_cross): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_intra): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (circonv): CirConv(
+              (conv): Conv1d(256, 256, kernel_size=(9,), stride=(1,))
+              (relu): ReLU(inplace=True)
+              (norm): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (norm_fuse): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (mlp_fuse): Linear(in_features=256, out_features=256, bias=True)
+            (drop_path): DropPath(drop_prob=0.100)
+            (norm_intra): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (attn_inter): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+            )
+            (dropout_inter): Dropout(p=0.1, inplace=False)
+            (norm_inter): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            (linear1): Linear(in_features=256, out_features=1024, bias=True)
+            (dropout3): Dropout(p=0.1, inplace=False)
+            (linear2): Linear(in_features=1024, out_features=256, bias=True)
+            (dropout4): Dropout(p=0.1, inplace=False)
+            (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+        (ref_point_head): MLP(
+          (layers): ModuleList(
+            (0): Linear(in_features=256, out_features=256, bias=True)
+            (1): Linear(in_features=256, out_features=256, bias=True)
+          )
+        )
+        (ctrl_point_coord): ModuleList(
+          (0): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+          (1): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+          (2): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+          (3): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+          (4): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+          (5): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=256, bias=True)
+              (1): Linear(in_features=256, out_features=256, bias=True)
+              (2): Linear(in_features=256, out_features=2, bias=True)
+            )
+          )
+        )
+      )
+      (enc_output): Linear(in_features=256, out_features=256, bias=True)
+      (enc_output_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+      (bbox_class_embed): Linear(in_features=256, out_features=1, bias=True)
+      (bbox_embed): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=4, bias=True)
+        )
+      )
+    )
+    (ctrl_point_class): ModuleList(
+      (0): Linear(in_features=256, out_features=1, bias=True)
+      (1): Linear(in_features=256, out_features=1, bias=True)
+      (2): Linear(in_features=256, out_features=1, bias=True)
+      (3): Linear(in_features=256, out_features=1, bias=True)
+      (4): Linear(in_features=256, out_features=1, bias=True)
+      (5): Linear(in_features=256, out_features=1, bias=True)
+    )
+    (ctrl_point_coord): ModuleList(
+      (0): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+      (1): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+      (2): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+      (3): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+      (4): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+      (5): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=2, bias=True)
+        )
+      )
+    )
+    (bbox_coord): MLP(
+      (layers): ModuleList(
+        (0): Linear(in_features=256, out_features=256, bias=True)
+        (1): Linear(in_features=256, out_features=256, bias=True)
+        (2): Linear(in_features=256, out_features=4, bias=True)
+      )
+    )
+    (bbox_class): Linear(in_features=256, out_features=1, bias=True)
+    (input_proj): ModuleList(
+      (0): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+        (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (1): Sequential(
+        (0): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1))
+        (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (2): Sequential(
+        (0): Conv2d(2048, 256, kernel_size=(1, 1), stride=(1, 1))
+        (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (3): Sequential(
+        (0): Conv2d(2048, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+    )
+  )
+  (parseq): PARSeq(
+    (encoder): Encoder(
+      (patch_embed): PatchEmbed(
+        (proj): Conv2d(3, 384, kernel_size=(4, 8), stride=(4, 8))
+        (norm): Identity()
+      )
+      (pos_drop): Dropout(p=0.0, inplace=False)
+      (patch_drop): Identity()
+      (norm_pre): Identity()
+      (blocks): Sequential(
+        (0): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (1): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (2): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (3): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (4): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (5): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (6): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (7): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (8): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (9): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (10): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+        (11): Block(
+          (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (attn): Attention(
+            (qkv): Linear(in_features=384, out_features=1152, bias=True)
+            (q_norm): Identity()
+            (k_norm): Identity()
+            (attn_drop): Dropout(p=0.0, inplace=False)
+            (proj): Linear(in_features=384, out_features=384, bias=True)
+            (proj_drop): Dropout(p=0.0, inplace=False)
+          )
+          (ls1): Identity()
+          (drop_path1): Identity()
+          (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (mlp): Mlp(
+            (fc1): Linear(in_features=384, out_features=1536, bias=True)
+            (act): GELU()
+            (drop1): Dropout(p=0.0, inplace=False)
+            (norm): Identity()
+            (fc2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop2): Dropout(p=0.0, inplace=False)
+          )
+          (ls2): Identity()
+          (drop_path2): Identity()
+        )
+      )
+      (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (fc_norm): Identity()
+      (head_drop): Dropout(p=0.0, inplace=False)
+      (head): Identity()
+    )
+    (decoder): Decoder(
+      (layers): ModuleList(
+        (0): DecoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=384, out_features=384, bias=True)
+          )
+          (cross_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=384, out_features=384, bias=True)
+          )
+          (linear1): Linear(in_features=384, out_features=1536, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear2): Linear(in_features=1536, out_features=384, bias=True)
+          (norm1): LayerNorm((384,), eps=1e-05, elementwise_affine=True)
+          (norm2): LayerNorm((384,), eps=1e-05, elementwise_affine=True)
+          (norm_q): LayerNorm((384,), eps=1e-05, elementwise_affine=True)
+          (norm_c): LayerNorm((384,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.1, inplace=False)
+          (dropout2): Dropout(p=0.1, inplace=False)
+          (dropout3): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (norm): LayerNorm((384,), eps=1e-05, elementwise_affine=True)
+    )
+    (head): Linear(in_features=384, out_features=95, bias=True)
+    (text_embed): TokenEmbedding(
+      (embedding): Embedding(97, 384)
+    )
+    (dropout): Dropout(p=0.1, inplace=False)
+  )
+  (bezier_model): Model(
+    (bezier_align): BezierAlign(output_size=(256, 1024), spatial_scale=1.0, sampling_ratio=1, aligned=True)
+  )
+  (criterion): SetCriterion(
+    (enc_matcher): BoxHungarianMatcher()
+    (dec_matcher): CtrlPointHungarianMatcher()
+  )
+)
+[08/17 01:16:37] fvcore.common.checkpoint INFO: [Checkpointer] Loading from ckpts/pretrain_art.pth ...
+[08/17 01:16:38] fvcore.common.checkpoint WARNING: Some model parameters or buffers are not found in the checkpoint:
+[34mbezier_model.masks[0m
+[34mparseq.decoder.layers.0.cross_attn.out_proj.{bias, weight}[0m
+[34mparseq.decoder.layers.0.cross_attn.{in_proj_bias, in_proj_weight}[0m
+[34mparseq.decoder.layers.0.linear1.{bias, weight}[0m
+[34mparseq.decoder.layers.0.linear2.{bias, weight}[0m
+[34mparseq.decoder.layers.0.norm1.{bias, weight}[0m
+[34mparseq.decoder.layers.0.norm2.{bias, weight}[0m
+[34mparseq.decoder.layers.0.norm_c.{bias, weight}[0m
+[34mparseq.decoder.layers.0.norm_q.{bias, weight}[0m
+[34mparseq.decoder.layers.0.self_attn.out_proj.{bias, weight}[0m
+[34mparseq.decoder.layers.0.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34mparseq.decoder.norm.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.0.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.1.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.10.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.11.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.2.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.3.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.4.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.5.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.6.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.7.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.8.norm2.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.attn.proj.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.attn.qkv.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.mlp.fc1.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.mlp.fc2.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.norm1.{bias, weight}[0m
+[34mparseq.encoder.blocks.9.norm2.{bias, weight}[0m
+[34mparseq.encoder.norm.{bias, weight}[0m
+[34mparseq.encoder.patch_embed.proj.{bias, weight}[0m
+[34mparseq.encoder.pos_embed[0m
+[34mparseq.head.{bias, weight}[0m
+[34mparseq.pos_queries[0m
+[34mparseq.text_embed.embedding.weight[0m
+[08/17 01:16:38] adet.data.datasets.text INFO: Loaded 500 images in COCO format from datasets/ic15/test.json
+[08/17 01:16:38] d2.data.common INFO: Serializing 500 elements to byte tensors and concatenating them all ...
+[08/17 01:16:38] d2.data.common INFO: Serialized dataset takes 0.06 MiB
+[08/17 01:16:38] d2.data.dataset_mapper INFO: Augmentations used in training: [ResizeShortestEdge(short_edge_length=(1200, 1200), max_size=1900, sample_style='choice')]
+[08/17 01:16:38] d2.evaluation.evaluator INFO: Start inference on 500 images
+[08/17 01:16:40] d2.evaluation.evaluator INFO: Inference done 11/500. 0.2236 s / img. ETA=0:01:50
+[08/17 01:16:46] d2.evaluation.evaluator INFO: Inference done 34/500. 0.2228 s / img. ETA=0:01:44
+[08/17 01:16:51] d2.evaluation.evaluator INFO: Inference done 57/500. 0.2228 s / img. ETA=0:01:39
+[08/17 01:16:56] d2.evaluation.evaluator INFO: Inference done 80/500. 0.2223 s / img. ETA=0:01:34
+[08/17 01:17:01] d2.evaluation.evaluator INFO: Inference done 102/500. 0.2232 s / img. ETA=0:01:29
+[08/17 01:17:06] d2.evaluation.evaluator INFO: Inference done 124/500. 0.2246 s / img. ETA=0:01:25
+[08/17 01:17:11] d2.evaluation.evaluator INFO: Inference done 146/500. 0.2252 s / img. ETA=0:01:20
+[08/17 01:17:16] d2.evaluation.evaluator INFO: Inference done 169/500. 0.2244 s / img. ETA=0:01:15
+[08/17 01:17:21] d2.evaluation.evaluator INFO: Inference done 192/500. 0.2238 s / img. ETA=0:01:09
+[08/17 01:17:27] d2.evaluation.evaluator INFO: Inference done 215/500. 0.2237 s / img. ETA=0:01:04
+[08/17 01:17:32] d2.evaluation.evaluator INFO: Inference done 238/500. 0.2235 s / img. ETA=0:00:59
+[08/17 01:17:37] d2.evaluation.evaluator INFO: Inference done 261/500. 0.2236 s / img. ETA=0:00:53
+[08/17 01:17:42] d2.evaluation.evaluator INFO: Inference done 284/500. 0.2235 s / img. ETA=0:00:48
+[08/17 01:17:47] d2.evaluation.evaluator INFO: Inference done 307/500. 0.2236 s / img. ETA=0:00:43
+[08/17 01:17:53] d2.evaluation.evaluator INFO: Inference done 330/500. 0.2235 s / img. ETA=0:00:38
+[08/17 01:17:58] d2.evaluation.evaluator INFO: Inference done 353/500. 0.2232 s / img. ETA=0:00:33
+[08/17 01:18:03] d2.evaluation.evaluator INFO: Inference done 375/500. 0.2235 s / img. ETA=0:00:28
+[08/17 01:18:08] d2.evaluation.evaluator INFO: Inference done 398/500. 0.2234 s / img. ETA=0:00:23
+[08/17 01:18:13] d2.evaluation.evaluator INFO: Inference done 421/500. 0.2234 s / img. ETA=0:00:17
+[08/17 01:18:18] d2.evaluation.evaluator INFO: Inference done 444/500. 0.2235 s / img. ETA=0:00:12
+[08/17 01:18:23] d2.evaluation.evaluator INFO: Inference done 466/500. 0.2238 s / img. ETA=0:00:07
+[08/17 01:18:29] d2.evaluation.evaluator INFO: Inference done 488/500. 0.2242 s / img. ETA=0:00:02
+[08/17 01:18:31] d2.evaluation.evaluator INFO: Total inference time: 0:01:52.270188 (0.226808 s / img per device, on 1 devices)
+[08/17 01:18:31] d2.evaluation.evaluator INFO: Total inference pure compute time: 0:01:51 (0.224308 s / img per device, on 1 devices)
+[08/17 01:18:31] adet.evaluation.text_evaluation_all INFO: Saving results to output/R50/ArT/pretrain/ic15_art_imgsize_strong/inference/text_results.json
+[08/17 01:18:34] d2.engine.defaults INFO: Evaluation results for ic15_test in csv format:
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: Task: DETECTION_ONLY_RESULTS
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: precision,recall,hmean
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: 0.7838,0.8257,0.8042
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: Task: None-E2E_RESULTS
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: precision,recall,hmean
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: 0.6554,0.6904,0.6725
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: Task: Strong-E2E_RESULTS
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: precision,recall,hmean
+[08/17 01:18:34] d2.evaluation.testing INFO: copypaste: 0.9486,0.7559,0.8414

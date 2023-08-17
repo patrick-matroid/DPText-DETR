@@ -2,7 +2,9 @@ from typing import List
 import numpy as np
 import torch
 from torch import nn
-
+import re
+import time
+import torchvision.transforms as tvt
 from detectron2.modeling.meta_arch.build import META_ARCH_REGISTRY
 from detectron2.modeling import build_backbone
 from detectron2.structures import ImageList, Instances
@@ -14,6 +16,9 @@ from adet.modeling.dptext_detr.models import DPText_DETR
 from adet.utils.misc import NestedTensor, box_xyxy_to_cxcywh
 
 
+from bezier_generator import poly_to_bezier
+from strhub.data.module import SceneTextDataModule
+from PIL import Image, ImageOps
 class Joiner(nn.Sequential):
     def __init__(self, backbone, position_embedding):
         super().__init__(backbone, position_embedding)
@@ -109,9 +114,25 @@ class TransformerPureDetector(nn.Module):
         backbone = Joiner(d2_backbone, PositionalEncoding2D(N_steps, normalize=True))
         backbone.num_channels = d2_backbone.num_channels
         self.dptext_detr = DPText_DETR(cfg, backbone)
-
+        self.det_only = cfg.TEST.DET_ONLY
+        if not self.det_only:
+            self.parseq = torch.hub.load('baudm/parseq', 'parseq', pretrained=True).eval().to(self.device)
+            self.parseq_transform = tvt.Compose(
+                    [
+                        tvt.Resize(size=[32, 128], interpolation=tvt.InterpolationMode.BICUBIC, max_size=None, antialias=None), 
+                        tvt.Lambda(lambda x: x/255.0),
+                        tvt.Normalize(mean=0.5, std=0.5)
+                    ]
+                )
+            scale = 1
+            self.tgt_image_size = (2560,2560)
+            self.tgt_input_size = (int(self.tgt_image_size[0]//scale), int(self.tgt_image_size[1]//scale))  # H x W
+            self.bezier_output_size = (256, 1024)
+            from bezier_align_helper import Model as BezierModel
+            self.bezier_model = BezierModel(self.tgt_input_size, self.bezier_output_size, 1/scale)
+            
         box_matcher, point_matcher = build_matcher(cfg)
-
+ 
         loss_cfg = cfg.MODEL.TRANSFORMER.LOSS
         weight_dict = {'loss_ce': loss_cfg.POINT_CLASS_WEIGHT, 'loss_ctrl_points': loss_cfg.POINT_COORD_WEIGHT}
         enc_weight_dict = {
@@ -194,17 +215,119 @@ class TransformerPureDetector(nn.Module):
                     loss_dict[k] *= weight_dict[k]
             return loss_dict
         else:
+            assert len(batched_inputs) == 1
+            det_times = []
+            det_times.append(time.perf_counter())
             output = self.dptext_detr(images)
-            ctrl_point_cls = output["pred_logits"]
-            ctrl_point_coord = output["pred_ctrl_points"]
-            results = self.inference(ctrl_point_cls, ctrl_point_coord, images.image_sizes)
+            det_times.append(time.perf_counter())
+            results = self.inference(output["pred_logits"], output["pred_ctrl_points"], images.image_sizes)
+            
+            
             processed_results = []
             for results_per_image, input_per_image, image_size in zip(results, batched_inputs, images.image_sizes):
                 height = input_per_image.get("height", image_size[0])
                 width = input_per_image.get("width", image_size[1])
                 r = detector_postprocess(results_per_image, height, width)
+                det_times.append(time.perf_counter())
+                det_time_keys = ['det', 'det_post']
+                det_timer = [det_times[i+1] - det_times[i] for i in range(len(det_times)-1)]
+                det_timer_dict = dict(zip(det_time_keys, det_timer))
+                r = self.recog_text(r, input_per_image['file_name'])
+                r.timer[0].update(det_timer_dict) 
                 processed_results.append({"instances": r})
+
             return processed_results
+    
+    def recog_text(self, results, img_path):
+        if self.det_only:
+            return results
+        if len(results.polygons) >0:
+            img_pil = Image.open(img_path)
+            w, h = img_pil.size
+            times = []
+            times.append(time.perf_counter())
+            beziers = poly_to_bezier(results.polygons.cpu().numpy(), w*h)
+            times.append(time.perf_counter())
+            crops = self.bezier_crop(img_pil , beziers)
+            times.append(time.perf_counter())
+            
+            logits = self.parseq(crops)
+            times.append(time.perf_counter())
+            results.recs, _ = self.parseq.tokenizer.decode(logits.softmax(-1))
+            times.append(time.perf_counter())
+            # results.recs = [re.sub(r'[^a-zA-Z0-9]', '', x) for x in results.recs]
+    
+            time_keys = ['gen_bez', 'bez_align', 'recog', 'decod']
+            timer = [times[i+1] - times[i] for i in range(len(times)-1)]
+            results.timer = [dict(zip(time_keys, timer))] + [None]*(len(results.polygons)-1)
+        else:
+            results.recs, results.recs_scores,results.timer = [], [], [{}]
+        return results
+    
+
+    def bezier_crop(self, im, cps, device=torch.device('cuda'), return_tensor = True):
+    
+        from bezier_align_helper import get_size
+        # beziers = [[]]
+    
+        # down_scales = []
+        
+        # times = []
+        # times.append(time.perf_counter())
+        # pad
+        w, h = im.size
+        down_scale = get_size(self.tgt_image_size, w, h)
+        # down_scales.append(down_scale)
+        # assert not down_scale > 1
+        # if down_scale > 1:
+        #     im = im.resize((int(w / down_scale), int(h / down_scale)), Image.ANTIALIAS)
+        #     w, h = im.size
+        trans = []
+        if down_scale > 1:
+            new_h, new_w = int(h/down_scale), int(w/down_scale)
+            trans.append(tvt.Resize(size = (new_h, new_w), antialias=True ))
+            h, w = new_h, new_w
+        trans.extend(
+            [
+                tvt.Pad(padding= (0, 0, self.tgt_image_size[1] - w, self.tgt_image_size[0] - h)),
+                tvt.Resize (size= self.tgt_input_size, antialias=True)
+            ])
+        trans = tvt.Compose(trans)
+        
+        x = torch.from_numpy(np.array(trans(im)))[None].permute(0, 3, 1, 2).to(device)
+        
+        # im_arrs = []
+        # # im = ImageOps.expand(im, padding)
+        # # im = im.resize((self.tgt_input_size[1], self.tgt_input_size[0]), Image.ANTIALIAS)
+        # im_arrs.append(np.array(im))
+        # im_arrs = np.stack(im_arrs)
+        # x = torch.from_numpy(im_arrs).permute(0, 3, 1, 2).to(device).float()
+
+        # times.append(time.perf_counter())
+
+        beziers = [torch.from_numpy(cps).to(device).float()/down_scale]
+        # beziers = [b / d for b, d in zip(beziers, down_scales)]
+
+        
+        
+        # times.append(time.perf_counter())
+        
+        x = self.bezier_model(x, beziers)
+        
+        # times.append(time.perf_counter())
+        final_res = self.parseq_transform(x)
+        # crops = []
+        # for roi in x:
+        #     roi = roi.cpu().detach().numpy().transpose(1, 2, 0).astype(np.uint8)
+        #     crops.append(self.parseq_transform(Image.fromarray(roi, "RGB")))
+        # final_res = torch.stack(crops).to(device)
+        # times.append(time.perf_counter())
+        # time_keys = ['pad','formatting', 'align', 'transform']
+        # timer = [times[i+1] - times[i] for i in range(len(times)-1)]
+        # print(dict(zip(time_keys, timer)))
+        return final_res
+        
+
 
     def prepare_targets(self, targets):
         new_targets = []
